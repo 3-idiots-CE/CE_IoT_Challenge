@@ -1,0 +1,26 @@
+<div class="m-5">
+    <table class="table table-bordered">
+    <thead class="thead-light">
+        <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">longitude</th>
+        <th scope="col">latitude</th>
+        <th scope="col">Created At</th>
+        <th scope="col">See in map</th>
+        </tr>
+    </thead>
+    <tbody class="table table-striped">
+        {{#each locations}}
+        <tr>
+        <th scope="row">1</th>
+        <td>{{this.name}}</td>
+        <td>{{this.lat}}</td>
+        <td>{{this.long}}</td>
+        <td>@mdo</td>
+        <td><a href="https://www.google.com/maps/@14.1108327,109.1761242,15z" target="_blank">View</a></td>
+        </tr>
+        {{/each}}
+    </tbody>
+    </table>
+</div>
