@@ -1,8 +1,11 @@
 const express = require('express');
+const cors = require('cors')
 const path = require('path');
 const handlebars = require('express-handlebars');
 const app = express();
 const port = process.env.PORT || '9000';
+
+app.use(cors());
 
 const route = require('./routes');
 const db = require('./config/db');
