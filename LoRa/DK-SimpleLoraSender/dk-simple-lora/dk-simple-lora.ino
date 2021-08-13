@@ -86,7 +86,7 @@ void setup() {
   txParams.frequency = 922000000;
   txParams.spreadingFactor = lsLoraSpreadingFactor_7;
   txParams.codingRate = lsLoraCodingRate_4_6;
-  txParams.bandwidth = lsLoraBandwidth_125_khz;
+  txParams.bandwidth = lsLoraBandwidth_500_khz;
 
   Serial.print("Terrestrial Uplink Frequency: ");
   Serial.println(txParams.frequency/1e6);

@@ -1,68 +1,65 @@
-/*
-  Rui Santos
-  Complete project details at Complete project details at https://RandomNerdTutorials.com/esp32-http-get-post-arduino/
-
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files.
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-*/
-
 #include <WiFi.h>
 #include <HTTPClient.h>
+#include <Arduino_JSON.h>
 
-const char* ssid = "<3";
-const char* password = "<3";
+#define ssid "BEAR FAMILY | 2.4G"
+#define password "bearhome"
+#define serverName "http://192.168.1.5:9000/location"
 
-//Your Domain name with URL path or IP address with path
-const char* serverName = "http://192.168.1.101:9000";
-
-// the following variables are unsigned longs because the time, measured in
-// milliseconds, will quickly become a bigger number than can be stored in an int.
 unsigned long lastTime = 0;
-// Timer set to 10 minutes (600000)
-//unsigned long timerDelay = 600000;
-// Set timer to 5 seconds (5000)
 unsigned long timerDelay = 5000;
 
 void setup() {
-  Serial.begin(115200);
-
+  Serial.begin(9600);
   WiFi.begin(ssid, password);
-  Serial.println("Connecting");
+  
+  Serial.println("[Connecting to WIFI]");
   while(WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
   }
-  Serial.println("");
-  Serial.print("Connected to WiFi network with IP Address: ");
-  Serial.println(WiFi.localIP());
- 
-  Serial.println("Timer set to 5 seconds (timerDelay variable), it will take 5 seconds before publishing the first reading.");
+  Serial.println("[Connected to WiFi]");
+  Serial.println("Delay 5 seconds before publishing the first reading.");
 }
 
 void loop() {
-  //Send an HTTP POST request every 10 minutes
-  if ((millis() - lastTime) > timerDelay) {
     //Check WiFi connection status
-    if(WiFi.status()== WL_CONNECTED){
+    if(WiFi.status() == WL_CONNECTED){
       WiFiClient client;
       HTTPClient http;
     
-      // Your Domain name with URL path or IP address with path
       http.begin(client, serverName);
 
-      // Specify content-type header
-      //http.addHeader("Content-Type", "application/x-www-form-urlencoded");
-      // Data to send with HTTP POST
-      //String httpRequestData = "api_key=tPmAT5Ab3j7F9&sensor=BME280&value1=24.25&value2=49.54&value3=1005.14";           
-      // Send HTTP POST request
-      //int httpResponseCode = http.POST(httpRequestData);
+      //Get package from LoRa Receiver and split
+        String LoRa_Received_String = "";
+        Serial.println("[Receiving data]");
+        while (!Serial.available()) {
+        }
+
+        delay(100);
+     
+        int count = 0;
+        String splited[3];
+        String data_received = "";
+
+        while (Serial.available()) {
+          char temp_read = Serial.read();
+           if (temp_read != 10)
+             data_received += char(temp_read);
+        }
       
-      // If you need an HTTP request with a content type: application/json, use the following:
+        for(int i = 0; i < data_received.length(); i++) {
+          char temp_read = data_received[i];
+          if (temp_read != 10) {
+            if (temp_read == 32)
+              count++;
+            else
+              splited[count] += char(temp_read);
+          }
+        }
+
+      //Send to web server
       http.addHeader("Content-Type", "application/json");
-      int httpResponseCode = http.POST("{\"name\":\"<3\",\"lat\":\"<3\",\"long\":\"<3\"}");
+      int httpResponseCode = http.POST("{\"name\":\"" + splited[0] + "\",\"lat\":\"" + splited[1] + "\", \"long\":\"" + splited[2] + "\"}");
+      
      
       Serial.print("HTTP Response code: ");
       Serial.println(httpResponseCode);
@@ -70,9 +67,4 @@ void loop() {
       // Free resources
       http.end();
     }
-    else {
-      Serial.println("WiFi Disconnected");
-    }
-    lastTime = millis();
-  }
 }

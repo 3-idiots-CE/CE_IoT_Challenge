@@ -5,7 +5,7 @@ void setup() {
   Serial.begin(9600);
   while (!Serial);
 
-  Serial.print("[Receiving LoRa message] ");
+  //Serial.print("[Receiving LoRa message] ");
 
   LoRa.setPins(10, 8, 6);
   if (!LoRa.begin(922E6)) {
@@ -14,7 +14,7 @@ void setup() {
   }
   
   LoRa.setSpreadingFactor(7);
-  LoRa.setSignalBandwidth(125E3);
+  LoRa.setSignalBandwidth(500E3);
   LoRa.setCodingRate4(6);
 }
 
@@ -24,7 +24,7 @@ void loop() {
   if (packetSize) {
     // received a packet
     
-    Serial.print("Received packet: '");
+    //Serial.print("Received packet: '");
 
     // read packet
     while (LoRa.available()) {
@@ -32,7 +32,7 @@ void loop() {
     }
 
     // print RSSI of packet
-    Serial.print("' with RSSI ");
-    Serial.println(LoRa.packetRssi());
+    //Serial.print("' with RSSI ");
+    //Serial.println(LoRa.packetRssi());
   }
 }
