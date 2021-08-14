@@ -20,7 +20,7 @@
 #endif
 
 // Interval between transmissions
-#define TX_INTERVAL 20
+#define TX_INTERVAL 120
 
 #include <LibLacuna.h>
 #include <SPI.h>
@@ -94,6 +94,7 @@ void setup() {
 
 String myGPS_data = "";
 String function_data = "";
+String device_id = "";
 
 void loop() {
 
@@ -104,6 +105,26 @@ void loop() {
   digitalWrite(LS_LED_BLUE, HIGH);
   delay(50);
   digitalWrite(LS_LED_BLUE, LOW);
+
+  // DETECT DEVICE ID
+
+  Serial.println();
+  Serial.print("[Detecting DEVICE ID] ");
+  while (Serial.available() <= 0) {
+    if (device_id != "")
+      break;
+  }
+
+  Serial.print("Device ID: ");
+  if (Serial.available() > 0 && device_id == "") {
+    while (Serial.available() > 0) {
+      char temp_read = Serial.read();
+      if (temp_read != 10)
+        device_id += char(temp_read);
+    }
+  }
+  
+  Serial.println(device_id);
 
   // DETECT SOS FUNCTION
   
@@ -147,7 +168,7 @@ void loop() {
 
   // SEND DATA VIA LORA
 
-  String all_data = function_data + " " + myGPS_data;
+  String all_data = device_id + " " + function_data + " " + myGPS_data;
   Serial.print("[Data] ");
   Serial.println(all_data);
   
