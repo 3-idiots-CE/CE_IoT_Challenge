@@ -16,7 +16,7 @@ const char* ssid = "<3";
 const char* password = "<3";
 
 //Your Domain name with URL path or IP address with path
-const char* serverName = "http://192.168.1.101:9000";
+const char* serverName = "http://127.0.0.1:9000/location";
 
 // the following variables are unsigned longs because the time, measured in
 // milliseconds, will quickly become a bigger number than can be stored in an int.
@@ -54,15 +54,15 @@ void loop() {
       http.begin(client, serverName);
 
       // Specify content-type header
-      //http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+      http.addHeader("Content-Type", "application/x-www-form-urlencoded");
       // Data to send with HTTP POST
-      //String httpRequestData = "api_key=tPmAT5Ab3j7F9&sensor=BME280&value1=24.25&value2=49.54&value3=1005.14";           
+      String httpRequestData = "name=quyen&lat=24.25&long=49.54";           
       // Send HTTP POST request
-      //int httpResponseCode = http.POST(httpRequestData);
+      int httpResponseCode = http.POST(httpRequestData);
       
       // If you need an HTTP request with a content type: application/json, use the following:
-      http.addHeader("Content-Type", "application/json");
-      int httpResponseCode = http.POST("{\"name\":\"<3\",\"lat\":\"<3\",\"long\":\"<3\"}");
+      //http.addHeader("Content-Type", "application/json");
+      //int httpResponseCode = http.POST("{\"name\":\"<3\",\"lat\":\"<3\",\"long\":\"<3\"}");
      
       Serial.print("HTTP Response code: ");
       Serial.println(httpResponseCode);

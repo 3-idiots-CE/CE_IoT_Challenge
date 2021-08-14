@@ -1,5 +1,5 @@
 const express = require('express');
-const cors = require('cors')
+var cors = require('cors');
 const path = require('path');
 const handlebars = require('express-handlebars');
 const app = express();
@@ -19,7 +19,7 @@ app.engine(
     'hbs',
     handlebars({
         extname: '.hbs',
-        helpers: {}
+        helpers: {},
     })
 );
 
@@ -30,4 +30,4 @@ route(app);
 
 app.listen(port, () => {
     console.log(`App listening at http://localhost:${port}`);
-})
+});
