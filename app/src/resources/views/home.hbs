@@ -117,7 +117,7 @@
                 
                 let htmlSearchButton = `<div class="btn-group" role="group" aria-label="Basic example">
                     <button type="button" class="btn btn-outline-success" onclick="seeMap(${item.lat},${item.long})"><i class="fa fa-search" aria-hidden="true"></i></button>
-                    <button type="button" class="btn btn-outline-danger" onclick="deleteLocation(${item.id})"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                    <button type="button" class="btn btn-outline-danger" onclick="deleteLocation('${item.id}')"><i class="fa fa-trash" aria-hidden="true"></i></button>
                 </div>`;
                 
                 itemTmp.push(htmlSearchButton);
