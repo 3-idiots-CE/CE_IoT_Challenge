@@ -136,12 +136,15 @@ void loop() {
       break;
   }
 
-  Serial.print("Device ID: ");
-  if (Serial.available() > 0 && device_id == "") {
+  Serial.print("[Dectecting Device ID] ");
+  if (Serial.available() > 0) {
+    device_id = "";
     while (Serial.available() > 0) {
       char temp_read = Serial.read();
-      if (temp_read != 10)
+      if (temp_read != 10 && temp_read != 32)
         device_id += char(temp_read);
+      else
+        break;
     }
   }
   
@@ -157,11 +160,14 @@ void loop() {
   }
 
   Serial.print("Function: ");
-  if (Serial.available() > 0 && function_data == "") {
+  if (Serial.available() > 0) {
+    function_data = "";
     while (Serial.available() > 0) {
       char temp_read = Serial.read();
-      if (temp_read != 10)
+      if (temp_read != 10 && temp_read != 32)
         function_data += char(temp_read);
+      else
+        break;
     }
   }
   
