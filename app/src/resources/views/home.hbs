@@ -96,7 +96,10 @@
                 itemTmp.push(item.id);
                 itemTmp.push(item.lat);
                 itemTmp.push(item.long);
-                itemTmp.push(item.createdAt);
+
+                let date = new Date(item.updatedAt);
+
+                itemTmp.push(date.toLocaleString('en-US'));
 
                 let htmlFunction = '';
                 switch (item.function) {

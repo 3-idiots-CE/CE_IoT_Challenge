@@ -12,7 +12,7 @@ const SiteController = {
     },
     getLocations: async (req, res, next) => {
         try {
-            const locations = await Location.find({});
+            let locations = await Location.find({});
             return res.json(locations);
         } catch (err) {
             return res.status(500).json({ msg: err.message });
