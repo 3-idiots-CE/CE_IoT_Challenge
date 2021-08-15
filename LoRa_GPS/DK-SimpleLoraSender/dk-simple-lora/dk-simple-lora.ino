@@ -20,7 +20,7 @@
 #endif
 
 // Interval between transmissions
-#define TX_INTERVAL 120
+#define TX_INTERVAL 20
 
 #include <LibLacuna.h>
 #include <SPI.h>
@@ -56,7 +56,6 @@ float gnss_lon;                         // Global node postition longitude
 uint8_t GPS_Address = 0x10;
 
 char nmeaBuffer[100];
-MicroNMEA nmea(nmeaBuffer, sizeof(nmeaBuffer));
 
 void setup() {
   Serial.begin(9600);
@@ -126,6 +125,7 @@ void loop() {
   digitalWrite(LS_LED_BLUE, HIGH);
   delay(50);
   digitalWrite(LS_LED_BLUE, LOW);
+  
 
   // DETECT DEVICE ID
 
@@ -204,30 +204,33 @@ void loop() {
 
 byte updategps() {
 
-// Switch on GPS
-   digitalWrite(LS_GPS_ENABLE, HIGH);
-   delay(200);
+  // Define a new nmea package
+  MicroNMEA nmea(nmeaBuffer, sizeof(nmeaBuffer));
+  
+  // Switch on GPS
+  digitalWrite(LS_GPS_ENABLE, HIGH);
+  delay(200);
    
-   while (!nmea.isValid())
-   {   
+  while (!nmea.isValid())
+  {   
      
-  // Get NMEA data from I2C
-  Wire.requestFrom(GPS_Address, 255);
-  while (Wire.available()) {
-    char c = Wire.read();
-    nmea.process(c);
-    //Serial.print(c);
-     }
-    delay(2000);
-   }
-
-
-//If a message is recieved print all the informations
-   if (nmea.isValid())
-   {   
-      gnss_lat = nmea.getLatitude()/1.0e6;
-      gnss_lon = nmea.getLongitude()/1.0e6;      
-      return(1); //exit function
+    // Get NMEA data from I2C
+    Wire.requestFrom(GPS_Address, 255);
+    while (Wire.available()) {
+      char c = Wire.read();
+      nmea.process(c);
+      //Serial.print(c);
     }
+    delay(2000);
+  }
+
+
+  //If a message is recieved print all the informations
+  if (nmea.isValid())
+  {   
+    gnss_lat = nmea.getLatitude()/1.0e6;
+    gnss_lon = nmea.getLongitude()/1.0e6;      
+    return(1); //exit function
+  }
   return(0);  
 }
